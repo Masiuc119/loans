@@ -36,6 +36,26 @@
         xhr.send(fd);
     }
 </script>
+<script>
+    function periodUpdate(vol) {
+        document.querySelector('#period_value').value = vol;
+        summValue()
+    }
+    function amountUpdate(vol) {
+        document.querySelector('#amount_value').value = vol;
+        summValue()
+    }
+    function percentUpdate(vol) {
+        document.querySelector('#percent_value').value = vol;
+        summValue()
+    }
+    function summValue(){
+        let period = Number.parseFloat(document.querySelector('#period_value').value);
+        let amount = Number.parseFloat(document.querySelector('#amount_value').value);
+        let percent = Number.parseFloat(document.querySelector('#percent_value').value);
+        document.querySelector('#summ_value').value = amount + (amount * (((percent / 30) * period)/100));
+    }
+</script>
 </body>
 </html>
 </#macro>

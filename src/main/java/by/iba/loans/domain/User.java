@@ -15,15 +15,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotBlank(message = "Username cannot be empty")
+    @NotBlank(message = "Логин не может быть пустым")
     private String username;
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
     private boolean active;
     private String avatar;
 
-    @Email(message = "Email is not correct")
-    @NotBlank(message = "Email cannot be empty")
+    @Email(message = "Не корректный email")
+    @NotBlank(message = "Email не может быть пустым")
     private String email;
     private String activationCode;
 

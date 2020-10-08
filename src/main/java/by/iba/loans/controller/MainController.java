@@ -22,7 +22,7 @@ public class MainController {
     private MessageRepo messageRepo;
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String loans(Map<String, Object> model) {
         return "home";
     }
 

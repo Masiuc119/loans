@@ -15,6 +15,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/main">Заявки на займы</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/deal">Заявки на займы(TEST)</a>
+            </li>
             <#if isAdmin>
             <li class="nav-item">
                 <a class="nav-link" href="/user">Панель администратора</a>
