@@ -1,6 +1,7 @@
 package by.iba.loans.domain;
 
 import org.hibernate.annotations.Parent;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,8 @@ public class Deal {
     private int amount;
     private int period;
     private float percent;
+    @NotBlank(message = "Поле не может быть пустым")
+    @Length(max = 2048, message = "Сообщение слишком длинное (максимум 2kB)")
     private String comment;
     private boolean active;//активно ли объявление
     @ManyToOne(fetch = FetchType.EAGER)
@@ -66,9 +69,9 @@ public class Deal {
     public void setPeriod(int period) {
         this.period = period;
     }
-
-    public float getPercent() {
-        return percent;
+//Возвращаем строку, т.к. иначе возвращаемое число идет через запятую, а для корректых расчетов нужно через точку.
+    public String getPercent() {
+        return Float.toString(percent);
     }
 
     public void setPercent(float percent) {

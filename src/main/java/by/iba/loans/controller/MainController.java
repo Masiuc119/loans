@@ -1,8 +1,8 @@
 package by.iba.loans.controller;
 
-import by.iba.loans.domain.Message;
+//import by.iba.loans.domain.Message;
 import by.iba.loans.domain.User;
-import by.iba.loans.repos.MessageRepo;
+//import by.iba.loans.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,15 +18,15 @@ import java.util.Map;
 
 @Controller
 public class MainController {
-    @Autowired
-    private MessageRepo messageRepo;
+/*    @Autowired
+    private MessageRepo messageRepo;*/
 
     @GetMapping("/")
     public String loans(Map<String, Object> model) {
         return "home";
     }
 
-    @GetMapping("/main")
+/*    @GetMapping("/main")
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Message> messages = messageRepo.findAll();
 
@@ -73,5 +73,5 @@ public class MainController {
         model.addAttribute("messages", messages);
 
         return "main";
-    }
+    }*/
 }

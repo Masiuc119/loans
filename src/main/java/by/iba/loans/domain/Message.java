@@ -1,3 +1,4 @@
+/*
 package by.iba.loans.domain;
 
 import org.hibernate.validator.constraints.Length;
@@ -80,3 +81,4 @@ public class Message {
         this.filename = filename;
     }
 }
+*/

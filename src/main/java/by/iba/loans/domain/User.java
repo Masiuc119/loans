@@ -36,6 +36,10 @@ public class User implements UserDetails {
         return roles.contains(Role.ADMIN);
     }
 
+    public boolean isModerator() {
+        return roles.contains(Role.MODERATOR);
+    }
+
     public Long getId() {
         return id;
     }

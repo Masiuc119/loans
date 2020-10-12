@@ -1,3 +1,4 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 
 <@c.page>
@@ -6,85 +7,84 @@
         Создать новую заявку...
     </a>
     <div class="collapse <#if message??>show</#if>" id="collapseExample">
-        <div class="form-group mt-3">
-            <form method="post" enctype="multipart/form-data">
-                <label for="periodStr">Срок займа </label>
-                <b><u>
-                        <output for="periodStr" id="period_value">30</output>
-                    </u></b>
-                <label for="periodStr"> дней.</label>
-                <input type="range" class="custom-range" min="1" max="100" value="30" id="periodStr" name="period"
-                       oninput="periodUpdate(value)">
-                <br/><br/>
-                <label for="amountStr">Желаемая сумма </label>
-                <b><u>
-                        <output for="amountStr" id="amount_value">100</output>
-                    </u></b>
-                <label for="amountStr"> рублей.</label>
-                <input type="range" class="custom-range" min="10" max="3000" value="100" id="amountStr" name="amount"
-                       oninput="amountUpdate(value)">
-                <br/><br/>
-                <label for="percentStr">Оплата за пользование не более </label>
-                <b><u>
-                        <output for="percentStr" id="percent_value">20</output>
-                    </u></b>
-                <label for="percentStr"> % в 30 дней.</label>
-                <input type="range" class="custom-range" min="1" max="100" value="20" step="0.1" id="percentStr"
-                       name="percent"
-                       oninput="percentUpdate(value)">
-                <br/>
-                <small class="form-text text-muted">
-                    Ориентировочно полная сумма к погашению составит <output for="percentStr amountStr periodStr" id="summ_value">0</output> рублей.
-                </small>
-                <br/>
-                <div class="form-group">
-                    <input type="text" class="form-control ${(textError??)?string('is-invalid', '')}"
-                           value="<#if message??>${message.text}</#if>" name="comment"
-                           placeholder="Ваш комментарий..."/>
-                    <#if textError??>
-                        <div class="invalid-feedback">
-                            ${textError}
-                        </div>
-                    </#if>
-                </div>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button"
-                   aria-expanded="false" aria-controls="collapseExample1">
-                    Добавить фото товара залогового товара...
-                </a>
-                <br/>
-                <div class="collapse <#if message??>show</#if>" id="collapseExample1">
-                    <@c.imgUploadForm></@c.imgUploadForm>
-                </div>
-                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Добавить</button>
-                </div>
-            </form>
-        </div>
+        <@c.dealForm></@c.dealForm>
     </div>
-    <div class="card-columns">
-        <#list deals as deal>
-            <div class="card my-3">
-                <#if imagess??>
-                    <#list imagess as images>
-                        <#if images.image?? && images.message == deal>
-                            <img src="${images.image}" class="card-img-top">
+    <div>
+        <table width="100%">
+            <#list deals as deal>
+                <tr class="table-primary">
+                    <th width="25%">
+                        <#if deal.authorAvatar??>
+                            <img src="${deal.authorAvatar}" class="rounded-circle" width="32px">
                         </#if>
-                    </#list>
-                </#if>
-                <div class="m-2">
-                    <span>${deal.comment}</span>
-                    <i>${deal.amount}</i>
-                </div>
-                <div class="card-footer text-muted">
-                    <#if deal.authorAvatar??>
-                        <img src="${deal.authorAvatar}" class="rounded-circle" width="64px">
-                    </#if>
-                    ${deal.authorName}
-                </div>
-            </div>
-        <#else>
-            No message
-        </#list>
+                        ${deal.authorName}
+                    </th>
+                    <th width="60%">
+                        ${deal.datePlacement}
+                    </th>
+                    <th>
+                        <small class="form-text text-muted">  ${deal.id}</small>
+                    </th>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        Сумма: ${deal.amount} руб.
+                    </td>
+                    <td rowspan="3">
+                        ${deal.comment}
+                        <#if imagess??>
+                            <#list imagess as images>
+                                <#if images.image?? && images.message == deal>
+                                    <div class="image__wrapper">
+                                        <img src="${images.image}" class="minimized" alt="клик для увеличения">
+                                    </div>
+                                </#if>
+                            </#list>
+                        </#if>
+                    </td>
+                    <td rowspan="3">
+                        <#if name == deal.authorName || isAdmin || isModerator >
+                            <form action="/deal/edit/${deal.id}" method="get">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-primary">Редактировать...</button>
+                            </form>
+                        </#if>
+                        <#if name == deal.authorName || isAdmin>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary">Деактивировать</button>
+                            </div>
+                        </#if>
+                        <#if name != deal.authorName>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary">Предложить займ...</button>
+                        </div>
+                        </#if>
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        Срок: ${deal.period} дней.
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        Процент не выше: ${deal.percent}% за 30 дней.
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <td></td>
+                    <td colspan="2">
+                        Всего МАЛО предложений получить займ.
+                    </td>
+                </tr>
+                <tr class="table-light">
+                    <td colspan="3" height="15">
+
+                    </td>
+                </tr>
+                <#else>
+                No message
+            </#list>
+        </table>
     </div>
 </@c.page>

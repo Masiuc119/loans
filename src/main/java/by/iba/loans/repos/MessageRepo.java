@@ -1,3 +1,4 @@
+/*
 package by.iba.loans.repos;
 
 import by.iba.loans.domain.Message;
@@ -10,3 +11,4 @@ public interface MessageRepo extends CrudRepository<Message, Long> {
     List<Message> findByTag(String tag);
 
 }
+*/

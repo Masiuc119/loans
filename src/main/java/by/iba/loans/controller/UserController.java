@@ -24,7 +24,6 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserSevice userSevice;
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model) {

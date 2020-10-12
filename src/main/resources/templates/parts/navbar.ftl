@@ -13,10 +13,7 @@
                 <a class="nav-link" href="/">Домой</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/main">Заявки на займы</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/deal">Заявки на займы(TEST)</a>
+                <a class="nav-link" href="/deal">Заявки на займы</a>
             </li>
             <#if isAdmin>
             <li class="nav-item">
