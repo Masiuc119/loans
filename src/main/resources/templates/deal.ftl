@@ -82,7 +82,7 @@
                     <tr class="table-secondary">
                         <td></td>
                         <td colspan="2">
-                            Всего МАЛО предложений получить займ.
+                            <a href="/deal/viewFeedbacks/${deal.id}">Всего МАЛО предложений получить займ.</a>
                         </td>
                     </tr>
                     <tr class="table-light">

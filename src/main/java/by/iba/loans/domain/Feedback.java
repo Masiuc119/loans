@@ -98,8 +98,9 @@ public class Feedback {
         this.period = period;
     }
 
-    public float getPercent() {
-        return percent;
+    //Возвращаем строку, т.к. иначе возвращаемое число идет через запятую, а для корректых расчетов нужно через точку.
+    public String getPercent() {
+        return Float.toString(percent);
     }
 
     public void setPercent(float percent) {

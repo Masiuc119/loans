@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface FeedbackRepo extends CrudRepository<Feedback, Long> {
     List<Feedback> findByMessage(Deal message);
-    int countByMessage(Deal message);
+    int countByMessage(Deal deal);
 }
