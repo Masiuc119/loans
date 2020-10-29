@@ -1,11 +1,17 @@
 package by.iba.loans.domain;
 
+import by.iba.loans.repos.FeedbackRepo;
+import by.iba.loans.service.DealService;
+import by.iba.loans.service.UserSevice;
 import org.hibernate.annotations.Parent;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Deal {

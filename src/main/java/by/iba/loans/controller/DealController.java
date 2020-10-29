@@ -7,6 +7,7 @@ import by.iba.loans.domain.User;
 import by.iba.loans.repos.DealRepo;
 import by.iba.loans.repos.FeedbackRepo;
 import by.iba.loans.repos.ImagesRepo;
+import by.iba.loans.service.DealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -29,12 +30,15 @@ public class DealController {
     private ImagesRepo imagesRepo;
     @Autowired
     private FeedbackRepo feedbackRepo;
+    @Autowired
+    private DealService dealService;
 
     @GetMapping("/deal")
     public String deal(Model model) {
         Iterable<Deal> deals = dealRepo.findAll();
         Iterable<Images> imagess = imagesRepo.findAll();
         Iterable<Feedback> feedbacks = feedbackRepo.findAll();
+        model.addAttribute("dealService", dealService);
         model.addAttribute("deals", deals);
         model.addAttribute("imagess", imagess);
         model.addAttribute("feedbacks", feedbacks);

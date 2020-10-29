@@ -60,6 +60,8 @@ public class FeedbackController {
             feedbackRepo.save(feedback);
             model.addAttribute("feedback", null);
         }
+        boolean isNew = false;
+        model.addAttribute("isNew", isNew);
         Iterable<Images> imagess = imagesRepo.findByMessage(deal.get());
         Iterable<Feedback> feedbacks = feedbackRepo.findByMessage(deal.get());
         model.addAttribute("feedbacks", feedbacks);

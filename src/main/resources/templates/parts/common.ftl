@@ -1,6 +1,6 @@
 <#macro page>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="ru">
     <head>
         <meta charset="UTF-8">
         <title>Loans</title>
@@ -13,7 +13,7 @@
               crossorigin="anonymous">
         <script src='https://www.google.com/recaptcha/api.js'></script>
     </head>
-    <body>
+    <body onload="numberValue()">
     <#include "navbar.ftl">
     <div class="container mt-5">
         <#nested>
@@ -52,7 +52,7 @@
                     <output for="periodStr" id="period_value"><#if !deals??>${deal.period}<#else>30</#if></output>
                 </u></b>
             <label for="periodStr"> дней.</label>
-            <input type="range" class="custom-range" min="1" max="100"
+            <input type="range" class="form-control-range" min="1" max="100"
                    value="<#if !deals??>${deal.period}<#else>30</#if>" id="periodStr" name="period"
                    oninput="periodUpdate(value)">
             <br/><br/>
@@ -61,7 +61,7 @@
                     <output for="amountStr" id="amount_value"><#if !deals??>${deal.amount}<#else>100</#if></output>
                 </u></b>
             <label for="amountStr"> рублей.</label>
-            <input type="range" class="custom-range" min="10" max="3000"
+            <input type="range" class="form-control-range" min="10" max="3000"
                    value="<#if !deals??>${deal.amount}<#else>100</#if>" id="amountStr" name="amount"
                    oninput="amountUpdate(value)">
             <br/><br/>
@@ -70,7 +70,7 @@
                     <output for="percentStr" id="percent_value"><#if !deals??>${deal.percent}<#else>20</#if></output>
                 </u></b>
             <label for="percentStr"> % в 30 дней.</label>
-            <input type="range" class="custom-range" min="1" max="100"
+            <input type="range" class="form-control-range" min="1" max="100"
                    value="<#if !deals??>${deal.percent}<#else>20</#if>" step="0.1" id="percentStr"
                    name="percent"
                    oninput="percentUpdate(value)">
@@ -105,5 +105,82 @@
                 <button type="submit" class="btn btn-primary"><#if !deals??>Сохранить<#else>Добавить</#if></button>
             </div>
         </form>
+    </div>
+</#macro>
+<#macro dealTable>
+    <div>
+        <table width="100%">
+            <#if deal??>
+                <tr class="table-primary">
+                    <th width="25%">
+                        <#if deal.authorAvatar??>
+                            <img src="${deal.authorAvatar}" class="rounded-circle" width="32px">
+                        </#if>
+                        ${deal.authorName}
+                    </th>
+                    <th width="60%">
+                        ${deal.datePlacement?string('dd.MM.yyyy HH:mm:ss')}
+                    </th>
+                    <th>
+                        <small class="form-text text-muted">  ${deal.id}</small>
+                    </th>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        Сумма: ${deal.amount} руб.
+                    </td>
+                    <td rowspan="3">
+                        ${deal.comment}
+                        <#if imagess??>
+                            <#list imagess as images>
+                                <#if images.image?? && images.message == deal>
+                                    <div class="image__wrapper">
+                                        <img src="${images.image}" class="minimized" alt="клик для увеличения">
+                                    </div>
+                                </#if>
+                            </#list>
+                        </#if>
+                    </td>
+                    <td rowspan="3">
+                        <#if name == deal.authorName || isAdmin || isModerator >
+                            <form action="/deal/edit/${deal.id}" method="get">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-primary">Редактировать...</button>
+                            </form>
+                        </#if>
+                        <#if deal.isActive()>
+                            <#if name == deal.authorName || isAdmin>
+                                <form action="/deal/disable/${deal.id}" method="get"
+                                      onsubmit="return confirm('Вы уверены?');">
+                                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Деактивировать</button>
+                                    </div>
+                                </form>
+                            </#if>
+                        <#else>
+                            Заявка неактивна.
+                        </#if>
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        Срок: ${deal.period} дней.
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        Процент не выше: ${deal.percent}% за 30 дней.
+                    </td>
+                </tr>
+                <tr class="table-light">
+                    <td colspan="3" height="15">
+
+                    </td>
+                </tr>
+            <#else>
+                Нет заявок
+            </#if>
+        </table>
     </div>
 </#macro>

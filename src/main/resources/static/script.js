@@ -35,6 +35,17 @@ function summValue() {
     document.querySelector('#summ_value').value = amount + (amount * (((percent / 30) * period) / 100));
 }
 
+//Удаление пробелов между разрядами цифр и запуск первоначального подсчета суммы займа ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+function numberValue() {
+    let str = (document.querySelector('#amount_value').value).replace('\u00A0', '');
+    document.querySelector('#amount_value').value = str;
+    if (document.querySelector('#amountStr').getAttribute('max') != 3000) {
+        document.querySelector('#amountStr').setAttribute('max', str);
+    }
+    document.querySelector('#amountStr').value = str;
+    summValue()
+}
+
 //Увеличение картинки по клику
 $(function () {
     $('.minimized').click(function (event) {

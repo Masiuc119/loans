@@ -1,7 +1,10 @@
 package by.iba.loans.controller;
 
+import by.iba.loans.domain.CompletedDeal;
 import by.iba.loans.domain.Role;
+import by.iba.loans.domain.StatusDeal;
 import by.iba.loans.domain.User;
+import by.iba.loans.repos.CompletedDealRepo;
 import by.iba.loans.service.UserSevice;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -24,6 +28,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserSevice userSevice;
+    @Autowired
+    private CompletedDealRepo completedDealRepo;
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model) {
@@ -53,16 +59,22 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("profile")
+    @GetMapping("profileEdit")
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("avatar", user.getAvatar());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
-
+        Iterable<CompletedDeal> completedDealLender = completedDealRepo.findByLender(user);
+        Iterable<CompletedDeal> completedDealBorrower = completedDealRepo.findByBorrower(user);
+        Date date = new Date();
+        model.addAttribute("user", user);
+        model.addAttribute("completedDealLender", completedDealLender);
+        model.addAttribute("completedDealBorrower", completedDealBorrower);
+        model.addAttribute("date", date);
         return "profile";
     }
 
-    @PostMapping("profile")
+    @PostMapping("profileEdit")
     public String updateProfile(
             @AuthenticationPrincipal User user,
             @RequestParam String file,
@@ -74,6 +86,6 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        return "redirect:/user/profile";
+        return "redirect:/user/profileEdit";
     }
 }
