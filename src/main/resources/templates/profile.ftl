@@ -92,7 +92,8 @@
                             </td>
                             <td>
                                 <#assign restDays = completedDeal.period - ((.now?date?long - completedDeal.date?date?long)/86400000)?round?int >
-                                ${(completedDeal.amount + (completedDeal.amount*(((completedDeal.percent/30)*(completedDeal.period - restDays))/100)))?string["0.##"]} рублей.
+                                ${(completedDeal.amount + (completedDeal.amount*(((completedDeal.percent/30)*(completedDeal.period - restDays))/100)))?string["0.##"]}
+                                рублей.
                             </td>
                             <td>
                                 <#if (restDays > 0)>${restDays} дней.<#else>Срок добровольного погашения пропущен. Коллекторы уже в пути. </#if>
@@ -101,14 +102,21 @@
                                 <#if completedDeal.statusDeal == "CONFIRMLENDER" || completedDeal.statusDeal == "CONFIRMBORROWER">
                                     Ожидается подтверждение заявки кредитором и перечисление денежных средств.....
                                 <#elseIf completedDeal.statusDeal == "TRANSFERMONEY">
-                                Денежные средства перечислены.
+                                    Денежные средства перечислены.
                                     <button type="button" class="btn btn-primary">Подтвердить получение</button>
                                 <#elseIf completedDeal.statusDeal == "RECEIVEMONEY">
-                                    <button type="button" class="btn btn-primary">Внести платеж.</button>
+                                    <form action="/addTransaction/${completedDeal.id}" method="post"
+                                          onsubmit="return alert('Платеж принят. Изменения на баллансе произойдут после подтверждения платежа получателем.')">
+                                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                        <input type="number" name="amount" value="0" min="1"/>
+                                        <button type="submit" class="btn btn-primary">Внести платеж.</button>
+                                    </form>
                                 <#else>Ошибка!!! Статус не установлен.</#if>
                             </td>
                         </tr>
-                        <tr class="table-light"><td colspan="7" height="15"></td></tr>
+                        <tr class="table-light">
+                            <td colspan="7" height="15"></td>
+                        </tr>
                     </#if>
                 <#else>
                     Нет активных займов
@@ -160,7 +168,8 @@
                             </td>
                             <td>
                                 <#assign restDays = completedDeal.period - ((.now?date?long - completedDeal.date?date?long)/86400000)?round?int >
-                                ${(completedDeal.amount + (completedDeal.amount*(((completedDeal.percent/30)*(completedDeal.period - restDays))/100)))?string["0.##"]} рублей.
+                                ${(completedDeal.amount + (completedDeal.amount*(((completedDeal.percent/30)*(completedDeal.period - restDays))/100)))?string["0.##"]}
+                                рублей.
                             </td>
                             <td>
                                 <#if (restDays > 0)>${restDays} дней.<#else>Срок добровольного погашения пропущен.
@@ -168,17 +177,33 @@
                             </td>
                             <td>
                                 <#if completedDeal.statusDeal == "CONFIRMLENDER">
-                                    <button type="button" class="btn btn-primary">Подтвердить заключение сделки.</button>
+                                    <button type="button" class="btn btn-primary">Подтвердить заключение сделки.
+                                    </button>
                                 <#elseIf completedDeal.statusDeal == "CONFIRMBORROWER">
-                                    <button type="button" class="btn btn-primary">Перечислить денежные средства.</button>
+                                    <button type="button" class="btn btn-primary">Перечислить денежные средства.
+                                    </button>
                                 <#elseIf completedDeal.statusDeal == "TRANSFERMONEY">
                                     Ожидание подтверждения дебитором получения денежных средств....
                                 <#elseIf completedDeal.statusDeal == "RECEIVEMONEY">
-                                    <button type="button" class="btn btn-primary">Подтвердить прием платежа.</button>
+                                    <#list transactions as transaction>
+                                        <#if transaction.completedDeal == completedDeal>
+                                            <form method="post" action="/setTransaction/${transaction.id}"
+                                                  onsubmit="return confirm('Подтвердить принятие суммы ${transaction.amount} рублей?')">
+                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                                Поступил платеж на сумму:
+                                                <input type="text" value="${transaction.amount}" disabled/>
+                                                рублей.
+                                                <button type="submit" class="btn btn-primary">Подтвердить прием платежа.
+                                                </button>
+                                            </form>
+                                        </#if>
+                                    </#list>
                                 <#else>Ошибка!!! Статус не установлен.</#if>
                             </td>
                         </tr>
-                        <tr class="table-light"><td colspan="7" height="15"></td></tr>
+                        <tr class="table-light">
+                            <td colspan="7" height="15"></td>
+                        </tr>
                     </#if>
                 <#else>
                     Нет активных займов

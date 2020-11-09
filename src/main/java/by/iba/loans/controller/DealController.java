@@ -81,7 +81,9 @@ public class DealController {
     }
 
     @GetMapping("/deal/edit/{dealId}")
-    public String dealEdit(@AuthenticationPrincipal User user, Model model, @PathVariable String dealId) {
+    public String dealEdit(@AuthenticationPrincipal User user,
+                           Model model,
+                           @PathVariable String dealId) {
         Optional<Deal> deal = dealRepo.findById(Long.parseLong(dealId));
         if (user.isAdmin() || user.isModerator() || Objects.equals(user.getId(), deal.get().getAuthor().getId())) {
             Iterable<Images> imagess = imagesRepo.findAll();

@@ -2,9 +2,10 @@ package by.iba.loans.controller;
 
 import by.iba.loans.domain.CompletedDeal;
 import by.iba.loans.domain.Role;
-import by.iba.loans.domain.StatusDeal;
+import by.iba.loans.domain.Transaction;
 import by.iba.loans.domain.User;
 import by.iba.loans.repos.CompletedDealRepo;
+import by.iba.loans.repos.TransactionRepo;
 import by.iba.loans.service.UserSevice;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class UserController {
     private UserSevice userSevice;
     @Autowired
     private CompletedDealRepo completedDealRepo;
+    @Autowired
+    private TransactionRepo transactionRepo;
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model) {
@@ -66,11 +69,13 @@ public class UserController {
         model.addAttribute("email", user.getEmail());
         Iterable<CompletedDeal> completedDealLender = completedDealRepo.findByLender(user);
         Iterable<CompletedDeal> completedDealBorrower = completedDealRepo.findByBorrower(user);
+        Iterable<Transaction> transactions = transactionRepo.findAll();
         Date date = new Date();
         model.addAttribute("user", user);
         model.addAttribute("completedDealLender", completedDealLender);
         model.addAttribute("completedDealBorrower", completedDealBorrower);
         model.addAttribute("date", date);
+        model.addAttribute("transactions", transactions);
         return "profile";
     }
 
