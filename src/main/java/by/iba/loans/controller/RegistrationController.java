@@ -49,17 +49,17 @@ public class RegistrationController {
         CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 
         if (!response.isSuccess()) {
-            model.addAttribute("captchaError", "Fill captcha");
+            model.addAttribute("captchaError", "Заполните каптчу");
         }
 
         boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
 
         if (isConfirmEmpty) {
-            model.addAttribute("password2Error", "Password confirmation cannot be empty");
+            model.addAttribute("password2Error", "Поле 'Повторить пароль:' не может быть пустым");
         }
 
         if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
-            model.addAttribute("passwordError", "Passwords are different!");
+            model.addAttribute("passwordError", "Пароли не совпадают");
         }
 
         if (isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()) {
@@ -71,7 +71,7 @@ public class RegistrationController {
         }
 
         if (!userSevice.addUser(user)) {
-            model.addAttribute("usernameError", "User exists!");
+            model.addAttribute("usernameError", "Пользователь с таким логином уже существует. Попробуйте придумать другой.");
             return "registration";
         }
 
@@ -84,10 +84,10 @@ public class RegistrationController {
 
         if (isActivated) {
             model.addAttribute("messageType", "success");
-            model.addAttribute("message", "User successfully activated");
+            model.addAttribute("message", "Активация пользователя прошла успешно");
         } else {
             model.addAttribute("messageType", "danger");
-            model.addAttribute("message", "Activation code is not found!");
+            model.addAttribute("message", "Не верный код активации");
         }
 
         return "login";

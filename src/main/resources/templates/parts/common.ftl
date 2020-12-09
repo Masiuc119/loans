@@ -4,20 +4,23 @@
     <head>
         <meta charset="UTF-8">
         <title>Loans</title>
-        <link rel="stylesheet" href="/static/style.css">
+        <link rel="stylesheet" href="/static/css/slicknav.css">
+        <link rel="stylesheet" href="/static/css/style_manual.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-              integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-              crossorigin="anonymous">
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/style.css">
         <script src='https://www.google.com/recaptcha/api.js'></script>
     </head>
     <body onload="numberValue()">
     <#include "navbar.ftl">
-    <div class="container mt-5">
-        <#nested>
+    <div class="slider_area">
+        <div class="single_slider  d-flex align-items-center slider_bg_1">
+        </div>
     </div>
+
+    <#nested>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -31,14 +34,18 @@
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
             crossorigin="anonymous"></script>
     <script src="/static/script.js"></script>
+    <script src="/static/js/jquery.slicknav.min.js"></script>
+    <script src="/static/js/main.js"></script>
     </body>
     </html>
 </#macro>
 <#macro imgUploadForm>
-    <div class="form-group">
+    <div class="form-group" style="margin-top: 15px">
         <div class="custom-file">
             <input type="file" name="custom-file-input" class="custom-file-input" id="customFile"
                    onchange="upload(this.files[0])" accept="image/*">
+            <img src="https://klimaschutz-praxis.de/fileadmin/images/fallback.png" class="rounded-circle" width="75px"
+                 id="foto">
             <label class="custom-file-label" for="customFile">Выберите файл...</label>
             <input type="hidden" name="file" id="customFile_input">
         </div>
@@ -91,9 +98,9 @@
                     </div>
                 </#if>
             </div>
-            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button"
+            <a class="boxed-btn3" data-toggle="collapse" href="#collapseExample1" role="button"
                aria-expanded="false" aria-controls="collapseExample1">
-                Добавить фото товара залогового товара...
+                Добавить фото залогового товара...
             </a>
             <br/>
             <div class="collapse <#if message??>show</#if>" id="collapseExample1">
@@ -102,85 +109,83 @@
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <#if !deals??><input type="hidden" name="id" value="${deal.id}"/></#if>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary"><#if !deals??>Сохранить<#else>Добавить</#if></button>
+                <button type="submit" class="boxed-btn3"
+                        style="margin-top: 15px"><#if !deals??>Сохранить<#else>Добавить</#if></button>
             </div>
         </form>
     </div>
 </#macro>
 <#macro dealTable>
-    <div>
-        <table width="100%">
-            <#if deal??>
-                <tr class="table-primary">
-                    <th width="25%">
-                        <#if deal.authorAvatar??>
-                            <img src="${deal.authorAvatar}" class="rounded-circle" width="32px">
-                        </#if>
-                        ${deal.authorName}
-                    </th>
-                    <th width="60%">
-                        ${deal.datePlacement?string('dd.MM.yyyy HH:mm:ss')}
-                    </th>
-                    <th>
-                        <small class="form-text text-muted">  ${deal.id}</small>
-                    </th>
-                </tr>
-                <tr class="table-secondary">
-                    <td>
-                        Сумма: ${deal.amount} руб.
-                    </td>
-                    <td rowspan="3">
-                        ${deal.comment}
-                        <#if imagess??>
-                            <#list imagess as images>
-                                <#if images.image?? && images.message == deal>
-                                    <div class="image__wrapper">
-                                        <img src="${images.image}" class="minimized" alt="клик для увеличения">
+    <div class="job_listing_area">
+        <div class="container">
+            <div class="job_lists">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="single_jobs white-bg d-flex justify-content-between">
+                            <div class="jobs_left d-flex align-items-center">
+                                <div class="date" align="center" style="margin-right: 20px">
+                                    ${deal.datePlacement?string('dd.MM.yyyy')}
+                                    <br/><br/><br/>
+                                    <#if deal.authorAvatar??>
+                                        <img src="${deal.authorAvatar}" class="rounded-circle" width="50px">
+                                    </#if>
+                                    <p> ${deal.authorName}</p>
+                                </div>
+                                <div class="jobs_conetent">
+                                    <h4>${deal.comment}</h4>
+                                    <#if imagess??>
+                                        <#list imagess as images>
+                                            <#if images.image?? && images.message == deal>
+                                                <div class="image__wrapper">
+                                                    <img src="${images.image}" class="minimized"
+                                                         alt="клик для увеличения">
+                                                </div>
+                                            </#if>
+                                        </#list>
+                                    </#if>
+                                    <div class="links_locat d-flex align-items-center">
+                                        <div class="location">Сумма: ${deal.amount} руб.</div>
+                                        <div class="location">Срок: ${deal.period} дней.</div>
+                                        <div class="location">Процент не выше: ${deal.percent}% за 30 дней.
+                                        </div>
                                     </div>
-                                </#if>
-                            </#list>
-                        </#if>
-                    </td>
-                    <td rowspan="3">
-                        <#if name == deal.authorName || isAdmin || isModerator >
-                            <form action="/deal/edit/${deal.id}" method="get">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                                <button type="submit" class="btn btn-primary">Редактировать...</button>
-                            </form>
-                        </#if>
-                        <#if deal.isActive()>
-                            <#if name == deal.authorName || isAdmin>
-                                <form action="/deal/disable/${deal.id}" method="get"
-                                      onsubmit="return confirm('Вы уверены?');">
-                                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Деактивировать</button>
-                                    </div>
-                                </form>
-                            </#if>
-                        <#else>
-                            Заявка неактивна.
-                        </#if>
-                    </td>
-                </tr>
-                <tr class="table-secondary">
-                    <td>
-                        Срок: ${deal.period} дней.
-                    </td>
-                </tr>
-                <tr class="table-secondary">
-                    <td>
-                        Процент не выше: ${deal.percent}% за 30 дней.
-                    </td>
-                </tr>
-                <tr class="table-light">
-                    <td colspan="3" height="15">
-
-                    </td>
-                </tr>
-            <#else>
-                Нет заявок
-            </#if>
-        </table>
+                                </div>
+                            </div>
+                            <div class="jobs_right">
+                                <div class="apply_now">
+                                    <#if name == deal.authorName || isAdmin || isModerator >
+                                        <div class="d-block">
+                                            <form action="/deal/edit/${deal.id}" method="get">
+                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                                <div class="form-group">
+                                                    <button type="submit" class="boxed-btn3">Редактировать...
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </#if>
+                                    <#if deal.isActive()>
+                                        <#if name == deal.authorName || isAdmin>
+                                            <div class="d-block">
+                                                <form action="/deal/disable/${deal.id}" method="get"
+                                                      onsubmit="return confirm('Вы уверены?');">
+                                                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="boxed-btn3">Деактивировать
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </#if>
+                                    <#else>
+                                        Заявка неактивна.
+                                    </#if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </#macro>

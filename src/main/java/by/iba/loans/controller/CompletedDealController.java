@@ -65,7 +65,7 @@ public class CompletedDealController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("completedDeal", completedDeal);
         } else {
-            if (deal.getAuthor() == user) {
+            if (deal.getAuthor().getId().equals(user.getId())) {
                 completedDealRepo.save(completedDeal);
                 completedDeal.getDeal().setActive(false);
             }

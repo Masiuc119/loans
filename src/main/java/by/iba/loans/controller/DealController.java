@@ -74,6 +74,7 @@ public class DealController {
         Iterable<Deal> deals = dealRepo.findAll();
         Iterable<Images> imagess = imagesRepo.findAll();
         Iterable<Feedback> feedbacks = feedbackRepo.findAll();
+        model.addAttribute("dealService", dealService);
         model.addAttribute("deals", deals);
         model.addAttribute("imagess", imagess);
         model.addAttribute("feedbacks", feedbacks);

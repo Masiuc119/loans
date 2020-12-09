@@ -7,6 +7,7 @@ function upload(file) {
     xhr.open("POST", "https://api.imageban.ru/v1");
     xhr.onload = function () {
         document.querySelector("#customFile_input").value = JSON.parse(xhr.responseText).data.link;
+        document.querySelector("#foto").src = JSON.parse(xhr.responseText).data.link;
     }
     xhr.setRequestHeader('Authorization', 'TOKEN CrtD5aHKfZwtcVqjzBPP');
     xhr.send(fd);
@@ -65,3 +66,5 @@ $(function () {
         });
     });
 });
+
+
