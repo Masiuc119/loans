@@ -7,10 +7,12 @@ import by.iba.loans.domain.User;
 import by.iba.loans.repos.DealRepo;
 import by.iba.loans.repos.FeedbackRepo;
 import by.iba.loans.repos.ImagesRepo;
+import by.iba.loans.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,8 @@ public class FeedbackController {
     private DealRepo dealRepo;
     @Autowired
     private ImagesRepo imagesRepo;
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/deal/{dealId}")
     public String dealId(@AuthenticationPrincipal User user, Model model, @PathVariable String dealId) {
@@ -50,22 +54,31 @@ public class FeedbackController {
             @PathVariable String dealId) {
         feedback.setAuthor(user);
         feedback.setDatePlacement(new Date());
-        Optional<Deal> deal = dealRepo.findById(Long.parseLong(dealId));
-        feedback.setMessage(deal.get());
+        Deal deal = dealRepo.findById(Long.parseLong(dealId)).get();
+        feedback.setMessage(deal);
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorsMap);
             model.addAttribute("feedback", feedback);
         } else {
             feedbackRepo.save(feedback);
+            if (!StringUtils.isEmpty(deal.getAuthor().getEmail())) {
+                String message = String.format(
+                        "Здравствуйте, %s! \n" +
+                                "На Вашу заявку в системе управления финансовыми микрозаймами добавлен новый отклик. Для просмотра пройдите пожалуйста по ссылке: http://localhost:8080/deal/viewFeedbacks/%s",
+                        deal.getAuthor().getUsername(),
+                        deal.getId()
+                );
+                mailSender.send(deal.getAuthor().getEmail(), "Новый отклик", message);
+            }
             model.addAttribute("feedback", null);
         }
         boolean isNew = false;
         model.addAttribute("isNew", isNew);
-        Iterable<Images> imagess = imagesRepo.findByMessage(deal.get());
-        Iterable<Feedback> feedbacks = feedbackRepo.findByMessage(deal.get());
+        Iterable<Images> imagess = imagesRepo.findByMessage(deal);
+        Iterable<Feedback> feedbacks = feedbackRepo.findByMessage(deal);
         model.addAttribute("feedbacks", feedbacks);
-        model.addAttribute("deal", deal.get());
+        model.addAttribute("deal", deal);
         model.addAttribute("imagess", imagess);
         return "dealId";
     }

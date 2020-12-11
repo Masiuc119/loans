@@ -47,11 +47,9 @@ public class RegistrationController {
     ) {
         String url = String.format(CAPTCHA_URL, secret, captchaResponce);
         CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
-
         if (!response.isSuccess()) {
             model.addAttribute("captchaError", "Заполните каптчу");
         }
-
         boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
 
         if (isConfirmEmpty) {
@@ -64,9 +62,7 @@ public class RegistrationController {
 
         if (isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
-
             model.mergeAttributes(errors);
-
             return "registration";
         }
 

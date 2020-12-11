@@ -4,9 +4,11 @@
     cursor: pointer;
     border: 1px solid #FFF;
 }
+
 .minimized:hover {
     border: 1px solid yellow;
 }
+
 /* увеличенная картинка */
 #magnify {
     display: none;
@@ -16,9 +18,11 @@
     height: auto;
     z-index: 9999;
 }
+
 #magnify img {
     width: 100%;
 }
+
 /* затемняющий фон */
 #overlay {
     display: none;
@@ -31,6 +35,7 @@
     opacity: 0.5;
     z-index: 9990;
 }
+
 /* кнопка закрытия */
 #close-popup {
     width: 30px;
@@ -43,6 +48,7 @@
     top: 15px;
     right: 15px;
 }
+
 #close-popup i {
     width: 30px;
     height: 30px;
@@ -50,29 +56,55 @@
     background-size: 16px 16px;
     display: block;
 }
+
 @keyframes rota {
-    25% { transform: rotate(360deg); }
+    25% {
+        transform: rotate(360deg);
+    }
 }
+
 #close-popup:hover {
     animation: rota 4s infinite normal;
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
 }
-.location{
+
+.location {
     border: 2px solid #000;
     border-radius: 10px;
     margin: 5px;
     padding: 5px;
 }
 
-.table_loans {width: 95%; border-collapse: collapse; margin: auto;}
-.table_loans thead tr {color: #ffffff; font-weight: bold; background: #00bf80;}
-.table_loans thead tr td {border: 1px solid #01ab73;}
-.table_loans tbody tr td {border: 1px solid #e8e9eb;}
-.table_loans tbody tr:nth-child(2n) {background: #f4f4f4;}
-.table_loans tbody tr:hover {background: #ebffe8;}
+.table_loans {
+    width: 95%;
+    border-collapse: collapse;
+    margin: auto;
+}
 
-.step{
+.table_loans thead tr {
+    color: #ffffff;
+    font-weight: bold;
+    background: #00bf80;
+}
+
+.table_loans thead tr td {
+    border: 1px solid #01ab73;
+}
+
+.table_loans tbody tr td {
+    border: 1px solid #e8e9eb;
+}
+
+.table_loans tbody tr:nth-child(2n) {
+    background: #f4f4f4;
+}
+
+.table_loans tbody tr:hover {
+    background: #ebffe8;
+}
+
+.step {
     object-position: center;
     width: 250px;
     height: 250px;

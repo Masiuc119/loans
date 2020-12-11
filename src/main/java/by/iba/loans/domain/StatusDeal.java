@@ -1,8 +1,8 @@
 package by.iba.loans.domain;
 
 public enum StatusDeal {
-    CONFIRMLENDER, //подтвердил кредитодатель
-    CONFIRMBORROWER, //подтвердил кредитополучатель
-    TRANSFERMONEY,//кредитодатель передал деньги
-    RECEIVEMONEY;//кредитополучатель получил деньги
+    CONFIRMBORROWER, //подтвердил заемщик
+    CONFIRMLENDER, //подтвердил инвестор
+    TRANSFERMONEY,//инвестор передал деньги
+    RECEIVEMONEY;//заемщик получил деньги
 }
