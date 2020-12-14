@@ -44,7 +44,7 @@
         <div class="custom-file">
             <input type="file" name="custom-file-input" class="custom-file-input" id="customFile"
                    onchange="upload(this.files[0])" accept="image/*">
-            <img src="https://klimaschutz-praxis.de/fileadmin/images/fallback.png" class="rounded-circle" width="75px"
+            <img src="https://klimaschutz-praxis.de/fileadmin/images/fallback.png" class="rounded-circle minimized" width="75px"
                  id="foto">
             <label class="custom-file-label" for="customFile">Выберите файл...</label>
             <input type="hidden" name="file" id="customFile_input">
